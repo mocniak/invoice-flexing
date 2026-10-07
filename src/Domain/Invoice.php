@@ -29,4 +29,9 @@ class Invoice
             0
         );
     }
+
+    public function markAsSending(): void
+    {
+        $this->status = InvoiceStatus::Sending;
+    }
 }

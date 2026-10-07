@@ -7,3 +7,9 @@ Feature:
         Given there is an Invoice created
         When I retrieve created invoice
         Then retrieved Invoice status is "draft"
+
+    Scenario: Sending an invoice
+        Given there is an Invoice created
+        When I send the created invoice to the customer
+        Then the message is sent with created invoice
+        And the created invoice status is "sending"

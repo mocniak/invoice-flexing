@@ -5,3 +5,5 @@ services:
 
     App\Tests\Behat\:
         resource: '../tests/Behat/*'
+    Symfony\Component\Mailer\EventListener\MessageLoggerListener:
+        alias: 'mailer.message_logger_listener'

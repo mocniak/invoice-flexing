@@ -9,7 +9,6 @@ use App\Domain\Invoice;
 use App\Domain\InvoiceStatus;
 use App\Repository\InvoiceRepository;
 use Behat\Behat\Context\Context;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -17,6 +16,8 @@ use PHPUnit\Framework\Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Mailer\Event\MessageEvent;
+use Symfony\Component\Mailer\EventListener\MessageLoggerListener;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -35,8 +36,9 @@ final class InvoiceContext implements Context
 
     public function __construct(
         private readonly KernelInterface $kernel,
-    private readonly App $app,
+        private readonly App $app,
         private readonly InvoiceRepository $invoiceView,
+        private readonly MessageLoggerListener $mailerLogger,
     )
     {
     }
@@ -62,7 +64,7 @@ final class InvoiceContext implements Context
     }
 
     #[When('/^I retrieve created invoice$/')]
-    public function iRetrieveCreatedInvoice() : void
+    public function iRetrieveCreatedInvoice(): void
     {
         $this->retrievedInvoice = $this->invoiceView->get($this->createdInvoiceId);
     }
@@ -71,5 +73,38 @@ final class InvoiceContext implements Context
     public function retrievedInvoiceStatusIs(string $status): void
     {
         Assert::assertSame(InvoiceStatus::from($status), $this->retrievedInvoice->status);
+    }
+
+    #[When('/^I send the created invoice to the customer$/')]
+    public function iSendTheCreatedInvoiceToTheCustomer(): void
+    {
+        $this->app->sendInvoice($this->createdInvoiceId);
+    }
+
+    #[Then('/^the message is sent with created invoice$/')]
+    public function theMessageIsSentWithCreatedInvoice(): void
+    {
+        // leave only those mails which reached the mail transport
+        $sentEventsInMailer = array_filter(
+            $this->mailerLogger->getEvents()->getEvents(),
+            static fn (MessageEvent $event) => !$event->isQueued(),
+        );
+
+        Assert::assertCount(1, $sentEventsInMailer);
+
+        $mailerEvent = array_values($sentEventsInMailer)[0];
+
+        // chech if the found email is the one we're looking for
+        Assert::assertSame(
+            $this->invoiceView->get($this->createdInvoiceId)->customerEmail,
+            $mailerEvent->getEnvelope()->getRecipients()[0]->getAddress(),
+        );
+    }
+
+    #[Given('/^the created invoice status is "([^"]*)"$/')]
+    public function theCreatedInvoiceStatusIs(string $status): void
+    {
+        $createdInvoice = $this->invoiceView->get($this->createdInvoiceId);
+        Assert::assertEquals(InvoiceStatus::from($status), $createdInvoice->status);
     }
 }
