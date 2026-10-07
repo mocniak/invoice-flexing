@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
-class InvoiceLine
+readonly class InvoiceLine
 {
     public function __construct(
-        public readonly string $productName,
-        public readonly int $quantity,
-        public readonly int $unitPrice
+        public string $productName,
+        public int $quantity,
+        public int $unitPrice
     )
     {
     }
