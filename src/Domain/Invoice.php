@@ -8,10 +8,17 @@ use Symfony\Component\Uid\UuidV7;
 class Invoice
 {
     public readonly UuidV7 $id;
+    public InvoiceStatus $status;
 
     public function __construct(public readonly string $customerName, public readonly string $customerEmail, public array $lines)
     {
         $this->id = Uuid::v7();
+        $this->status = InvoiceStatus::Draft;
+    }
+
+    public function status(): InvoiceStatus
+    {
+        return $this->status;
     }
 
     public function totalPrice(): int
