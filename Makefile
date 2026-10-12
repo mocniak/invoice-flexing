@@ -41,12 +41,8 @@ bash: ## Connect to the FrankenPHP container via bash so up and down arrows go t
 create-db:
 	@$(DOCKER_COMP) exec -e APP_ENV=dev php bin/console doctrine:database:create --if-not-exists
 	@$(DOCKER_COMP) exec -e APP_ENV=dev php bin/console doctrine:schema:update --force
-	@$(DOCKER_COMP) exec -e APP_ENV=dev php bin/console app:clickhouse:create-database
-	@$(DOCKER_COMP) exec -e APP_ENV=dev php bin/console app:clickhouse:create-schema
 	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/console doctrine:database:create --if-not-exists
 	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/console doctrine:schema:update --force
-	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/console app:clickhouse:create-database
-	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/console app:clickhouse:create-schema
 
 test: ## Start tests with phpunit, pass the parameter "c=" to add options to phpunit, example: make test c="--group e2e --stop-on-failure"
 	@$(eval c ?=)
@@ -60,9 +56,9 @@ composer: ## Run composer, pass the parameter "c=" to run a given command, examp
 	@$(eval c ?=)
 	@$(COMPOSER) $(c)
 
-vendor: ## Install vendors according to the current composer.lock file
-vendor: c=install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction
-vendor: composer
+composer-install: ## Install vendors according to the current composer.lock file
+composer-install: c=install
+composer-install: composer
 
 ## —— Symfony 🎵 ———————————————————————————————————————————————————————————————
 sf: ## List all Symfony commands or pass the parameter "c=" to run a given command, example: make sf c=about

@@ -19,4 +19,7 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 
+###> PHPStorm ###
 .idea
+.ai
+###< PHPStorm ###
