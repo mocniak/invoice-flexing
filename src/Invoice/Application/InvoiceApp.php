@@ -14,7 +14,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Uid\Uuid;
 
-readonly class App
+readonly class InvoiceApp
 {
     public function __construct(
         private InvoiceRepositoryInterface $invoiceRepository,

@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Invoice\Application\App;
+use App\Invoice\Application\InvoiceApp;
 use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
 use App\Invoice\Domain\Invoice;
 use App\Tests\Mother\InvoiceLineMother;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\MailerInterface;
 
-class AppTest extends TestCase
+class InvoiceAppTest extends TestCase
 {
     private $mailer;
     private $invoiceRepository;
@@ -20,7 +20,7 @@ class AppTest extends TestCase
     {
         $this->mailer = $this->createMock(MailerInterface::class);
         $this->invoiceRepository = $this->createMock(InvoiceRepositoryInterface::class);
-        $this->app = new App($this->invoiceRepository, $this->mailer);
+        $this->app = new InvoiceApp($this->invoiceRepository, $this->mailer);
     }
 
     public function testTryingToSendInvoiceWithStatusOtherThatDraftThrowsAnException()

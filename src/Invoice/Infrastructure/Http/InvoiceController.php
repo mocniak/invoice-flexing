@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Invoice\Infrastructure\Http;
 
-use App\Invoice\Application\App;
+use App\Invoice\Application\InvoiceApp;
 use App\Invoice\Application\Exception\InvoiceCannotBeSent;
 use App\Invoice\Application\Exception\InvoiceNotFound;
 use App\Invoice\Application\Query\InvoiceView;
@@ -31,7 +31,7 @@ class InvoiceController extends AbstractController
     public function __construct(
         private readonly InvoiceRepositoryInterface $invoiceRepository,
         private readonly InvoiceViews $invoiceViews,
-        private readonly App $app,
+        private readonly InvoiceApp $app,
     )
     {
     }

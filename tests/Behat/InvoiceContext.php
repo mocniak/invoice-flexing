@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Behat;
 
-use App\Invoice\Application\App;
+use App\Invoice\Application\InvoiceApp;
 use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
 use App\Invoice\Domain\Invoice;
 use App\Invoice\Domain\InvoiceLine;
@@ -34,7 +34,7 @@ final class InvoiceContext implements Context
 
     public function __construct(
         private readonly KernelInterface $kernel,
-        private readonly App $app,
+        private readonly InvoiceApp $app,
         private readonly InvoiceRepositoryInterface $invoiceRepository,
         private readonly MessageLoggerListener $mailerLogger,
     )

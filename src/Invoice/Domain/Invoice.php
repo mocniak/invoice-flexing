@@ -76,4 +76,9 @@ class Invoice
     {
         $this->status = InvoiceStatus::Sending;
     }
+
+    public function markAsSent(): void
+    {
+        $this->status = InvoiceStatus::SentToClient;
+    }
 }

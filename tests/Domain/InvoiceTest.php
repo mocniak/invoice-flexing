@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Tests\Domain;
 
 use App\Invoice\Domain\Invoice;
+use App\Invoice\Domain\InvoiceStatus;
 use App\Tests\Mother\InvoiceLineMother;
 use PHPUnit\Framework\TestCase;
 
@@ -16,5 +17,14 @@ class InvoiceTest extends TestCase
             InvoiceLineMother::aLine()->withQuantity(7)->withUnitPrice(3)->build(),
         ]);
         $this->assertEquals(51, $invoice->getTotalPrice());
+    }
+
+    public function testMarkAsSent(): void
+    {
+        $invoice = new Invoice('Customer Name', 'customer@example.com', [
+            InvoiceLineMother::any(),
+        ]);
+        $invoice->markAsSent();
+        $this->assertEquals(InvoiceStatus::SentToClient, $invoice->status());
     }
 }
