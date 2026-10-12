@@ -21,7 +21,7 @@ class NotificationControllerTest extends WebTestCase
 
         $line = new InvoiceLine('Product A', 1, 100);
         $invoice = new Invoice('Customer A', 'customer@example.com', [$line]);
-        $invoice->markAsSending();
+        $invoice->markAsInSending();
         $repository->save($invoice);
 
         $client->request('POST', '/api/notification/' . $invoice->id->toRfc4122() . '/mark-as-sent');

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Invoice\Domain;
 
+use App\Invoice\Domain\Exception\InvalidInvoiceTransition;
 use App\Invoice\Infrastructure\Repository\DoctrineInvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -45,19 +46,6 @@ class Invoice
         $this->lines = $lines;
     }
 
-    #[ORM\PostLoad]
-    public function postLoad(): void
-    {
-        $this->lines = array_map(
-            fn ($line) => $line instanceof InvoiceLine ? $line : new InvoiceLine(
-                $line['productName'],
-                (int) $line['quantity'],
-                (int) $line['unitPrice']
-            ),
-            $this->lines
-        );
-    }
-
     public function status(): InvoiceStatus
     {
         return $this->status;
@@ -67,18 +55,41 @@ class Invoice
     {
         return array_reduce(
             $this->lines,
-            fn (int $sum, InvoiceLine $line) => $sum + $line->getLinePrice(),
+            fn(int $sum, InvoiceLine $line) => $sum + $line->getLinePrice(),
             0
         );
     }
 
-    public function markAsSending(): void
+    public function markAsInSending(): void
     {
-        $this->status = InvoiceStatus::Sending;
+        if ($this->status !== InvoiceStatus::Draft) {
+            throw new InvalidInvoiceTransition('Only invoices in draft status can be marked as in sending');
+        }
+        $this->status = InvoiceStatus::InSending;
     }
 
+    /**
+     * @throws InvalidInvoiceTransition
+     */
     public function markAsSent(): void
     {
+        if ($this->status !== InvoiceStatus::InSending) {
+            throw new InvalidInvoiceTransition('Only invoices in sending status can be marked as sent');
+        }
         $this->status = InvoiceStatus::SentToClient;
+    }
+
+    // mapping details required by ORM
+    #[ORM\PostLoad]
+    public function postLoad(): void
+    {
+        $this->lines = array_map(
+            fn($line) => $line instanceof InvoiceLine ? $line : new InvoiceLine(
+                $line['productName'],
+                (int)$line['quantity'],
+                (int)$line['unitPrice']
+            ),
+            $this->lines
+        );
     }
 }

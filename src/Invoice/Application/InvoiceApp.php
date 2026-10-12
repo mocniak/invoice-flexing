@@ -55,7 +55,7 @@ readonly class InvoiceApp
             subject: 'Here is your invoice.',
             message: 'Lorem ipsum dolor sit amet.'
         ));
-        $invoiceToSend->markAsSending();
+        $invoiceToSend->markAsInSending();
         $this->invoiceRepository->save($invoiceToSend);
     }
 }

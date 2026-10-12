@@ -109,7 +109,7 @@ final class InvoiceContext implements Context
     public function theInvoiceIsMarkedAsSending(): void
     {
         $invoice = $this->invoiceRepository->get($this->createdInvoiceId);
-        $invoice->markAsSending();
+        $invoice->markAsInSending();
         $this->invoiceRepository->save($invoice);
     }
 

@@ -20,6 +20,11 @@ class InvoiceLineMother
         return self::aLine()->build();
     }
 
+    public static function nonEmpty(): InvoiceLine
+    {
+        return new InvoiceLine('Non Empty Line', 2, 100);
+    }
+
     public function withQuantity(int $quantity): self
     {
         $this->quantity = $quantity;

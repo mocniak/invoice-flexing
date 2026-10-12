@@ -7,6 +7,6 @@ namespace App\Invoice\Domain;
 enum InvoiceStatus: string
 {
     case Draft = 'draft';
-    case Sending = 'sending';
+    case InSending = 'sending';
     case SentToClient = 'sent-to-client';
 }

@@ -18,7 +18,7 @@ class NotificationSentHandlerTest extends TestCase
     public function testHandlesNotificationSentEventAndMarksInvoiceAsSent(): void
     {
         $invoice = new Invoice('Customer Name', 'customer@example.com', [InvoiceLineMother::any()]);
-        $invoice->markAsSending();
+        $invoice->markAsInSending();
 
         $repository = $this->createMock(InvoiceRepositoryInterface::class);
         $repository->expects($this->once())

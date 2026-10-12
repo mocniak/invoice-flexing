@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Invoice\Domain;
 
+use App\Invoice\Domain\Exception\InvalidInvoiceTransition;
 use App\Invoice\Domain\Invoice;
 use App\Invoice\Domain\InvoiceStatus;
 use App\Tests\Invoice\Mother\InvoiceLineMother;
+use App\Tests\Invoice\Mother\InvoiceMother;
 use PHPUnit\Framework\TestCase;
 
 class InvoiceTest extends TestCase
@@ -19,12 +21,55 @@ class InvoiceTest extends TestCase
         $this->assertEquals(51, $invoice->getTotalPrice());
     }
 
-    public function testMarkAsSent(): void
+    public function testDraftInvoiceCanBeMarkedAsInSending(): void
     {
-        $invoice = new Invoice('Customer Name', 'customer@example.com', [
-            InvoiceLineMother::any(),
-        ]);
+        $invoice = InvoiceMother::anInvoice()->withNonEmptyLines()->build();
+        $invoice->markAsInSending();
+        $this->assertEquals(InvoiceStatus::InSending, $invoice->status());
+    }
+
+    public function testDraftInvoiceCannotBeMarkedAsSent(): void
+    {
+        $invoice = InvoiceMother::anInvoice()->withNonEmptyLines()->build();
+        $this->expectException(InvalidInvoiceTransition::class);
+        $invoice->markAsSent();
+    }
+
+    public function testInSendingInvoiceCannotBeMarkedAsInSendingAgain(): void
+    {
+        $invoice = InvoiceMother::anInvoice()->withNonEmptyLines()->build();
+        $invoice->markAsInSending();
+        $this->expectException(InvalidInvoiceTransition::class);
+        $invoice->markAsInSending();
+    }
+
+    public function testInSendingInvoiceCanBeMarkedAsSent(): void
+    {
+        $invoice = InvoiceMother::anInvoice()->withNonEmptyLines()->build();
+        $invoice->markAsInSending();
         $invoice->markAsSent();
         $this->assertEquals(InvoiceStatus::SentToClient, $invoice->status());
     }
+
+    public function testSentInvoiceCannotBeMarkedAsSentAgain(): void
+    {
+        $invoice = InvoiceMother::anInvoice()->withNonEmptyLines()->build();
+        $invoice->markAsInSending();
+        $invoice->markAsSent();
+
+        $this->expectException(InvalidInvoiceTransition::class);
+        $invoice->markAsSent();
+    }
+
+    public function testSentInvoiceCannotBeMarkedAsInSending(): void
+    {
+        $invoice = InvoiceMother::anInvoice()->withNonEmptyLines()->build();
+        $invoice->markAsInSending();
+        $invoice->markAsSent();
+
+        $this->expectException(InvalidInvoiceTransition::class);
+        $invoice->markAsInSending();
+    }
+
+
 }
