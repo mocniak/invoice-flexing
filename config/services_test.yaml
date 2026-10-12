@@ -5,5 +5,8 @@ services:
 
     App\Tests\Behat\:
         resource: '../tests/Behat/*'
-    Symfony\Component\Mailer\EventListener\MessageLoggerListener:
-        alias: 'mailer.message_logger_listener'
+
+    App\Tests\Invoice\Stub\NotificationApiStub: ~
+
+    App\Notification\Api\NotificationApi: '@App\Tests\Invoice\Stub\NotificationApiStub'
+

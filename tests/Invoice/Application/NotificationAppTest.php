@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Tests\Application;
+namespace App\Tests\Invoice\Application;
 
 use App\Notification\Api\Events\NotificationSentEvent;
 use App\Notification\Application\NotificationApp;

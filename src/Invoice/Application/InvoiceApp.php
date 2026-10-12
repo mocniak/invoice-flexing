@@ -10,15 +10,15 @@ use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
 use App\Invoice\Domain\Invoice;
 use App\Invoice\Domain\InvoiceLine;
 use App\Invoice\Domain\InvoiceStatus;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use App\Notification\Api\Data\NotifyData;
+use App\Notification\Api\NotificationApi;
 use Symfony\Component\Uid\Uuid;
 
 readonly class InvoiceApp
 {
     public function __construct(
         private InvoiceRepositoryInterface $invoiceRepository,
-        private MailerInterface $mailer,
+        private NotificationApi $notificationApi,
     )
     {
     }
@@ -49,14 +49,12 @@ readonly class InvoiceApp
         if (count($invoiceToSend->lines) === 0) {
             throw new InvoiceCannotBeSent('Invoice has to contain at least one line');
         }
-
-        $email = (new Email())
-            ->from('invoices@example.com')
-            ->to($invoiceToSend->customerEmail)
-            ->subject('Your invoice')
-            ->text('Here is your invoice.');
-
-        $this->mailer->send($email);
+        $this->notificationApi->notify(new NotifyData(
+            resourceId: $invoiceId,
+            toEmail: $invoiceToSend->customerEmail,
+            subject: 'Here is your invoice.',
+            message: 'Lorem ipsum dolor sit amet.'
+        ));
         $invoiceToSend->markAsSending();
         $this->invoiceRepository->save($invoiceToSend);
     }

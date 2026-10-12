@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Tests\Application;
+namespace App\Tests\Invoice\Application;
 
 use App\Invoice\Application\Handler\NotificationSentHandler;
 use App\Invoice\Application\Repository\Exception\NotFound;
@@ -9,7 +9,7 @@ use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
 use App\Invoice\Domain\Invoice;
 use App\Invoice\Domain\InvoiceStatus;
 use App\Notification\Api\Events\NotificationSentEvent;
-use App\Tests\Mother\InvoiceLineMother;
+use App\Tests\Invoice\Mother\InvoiceLineMother;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 

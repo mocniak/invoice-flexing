@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Application\Query;
+namespace App\Tests\Invoice\Application\Query;
 
 use App\Invoice\Application\Query\InvoiceLineView;
 use App\Invoice\Application\Query\InvoiceView;

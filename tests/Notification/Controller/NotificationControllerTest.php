@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Tests\Controller;
+namespace App\Tests\Notification\Controller;
 
 use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
 use App\Invoice\Domain\Invoice;

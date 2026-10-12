@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Tests\Domain;
+namespace App\Tests\Invoice\Domain;
 
 use App\Invoice\Domain\Invoice;
 use App\Invoice\Domain\InvoiceStatus;
-use App\Tests\Mother\InvoiceLineMother;
+use App\Tests\Invoice\Mother\InvoiceLineMother;
 use PHPUnit\Framework\TestCase;
 
 class InvoiceTest extends TestCase

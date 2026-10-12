@@ -9,6 +9,7 @@ use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
 use App\Invoice\Domain\Invoice;
 use App\Invoice\Domain\InvoiceLine;
 use App\Invoice\Domain\InvoiceStatus;
+use App\Tests\Invoice\Stub\NotificationApiStub;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
@@ -19,8 +20,6 @@ use PHPUnit\Framework\Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Mailer\Event\MessageEvent;
-use Symfony\Component\Mailer\EventListener\MessageLoggerListener;
 use Symfony\Component\Uid\Uuid;
 
 final class InvoiceContext implements Context
@@ -36,7 +35,7 @@ final class InvoiceContext implements Context
         private readonly KernelInterface $kernel,
         private readonly InvoiceApp $app,
         private readonly InvoiceRepositoryInterface $invoiceRepository,
-        private readonly MessageLoggerListener $mailerLogger,
+        private readonly NotificationApiStub $notificationApiStub,
     )
     {
     }
@@ -77,26 +76,6 @@ final class InvoiceContext implements Context
     public function iSendTheCreatedInvoiceToTheCustomer(): void
     {
         $this->app->sendInvoice($this->createdInvoiceId);
-    }
-
-    #[Then('/^the message is sent with created invoice$/')]
-    public function theMessageIsSentWithCreatedInvoice(): void
-    {
-        // leave only those mails which reached the mail transport
-        $sentEventsInMailer = array_filter(
-            $this->mailerLogger->getEvents()->getEvents(),
-            static fn (MessageEvent $event) => !$event->isQueued(),
-        );
-
-        Assert::assertCount(1, $sentEventsInMailer);
-
-        $mailerEvent = array_values($sentEventsInMailer)[0];
-
-        // chech if the found email is the one we're looking for
-        Assert::assertSame(
-            $this->invoiceRepository->get($this->createdInvoiceId)->customerEmail,
-            $mailerEvent->getEnvelope()->getRecipients()[0]->getAddress(),
-        );
     }
 
     #[Given('there is an invoice for :customerName with email :customerEmail and lines:')]
@@ -179,6 +158,11 @@ final class InvoiceContext implements Context
         $this->response = $this->kernel->handle($request);
     }
 
+    #[Then('the message is sent with created invoice')]
+    public function theMessageIsSentWithCreatedInvoice(): void
+    {
+        Assert::assertTrue($this->notificationApiStub->didReceiveNotification($this->createdInvoiceId));
+    }
     #[Then('the response status code should be :statusCode')]
     public function theResponseStatusCodeShouldBe(int $statusCode): void
     {
