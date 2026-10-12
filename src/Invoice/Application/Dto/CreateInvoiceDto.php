@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Invoice\Infrastructure\Http\Dto;
+namespace App\Invoice\Application\Dto;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

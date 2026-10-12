@@ -3,17 +3,15 @@ declare(strict_types=1);
 
 namespace App\Invoice\Infrastructure\Http;
 
-use App\Invoice\Application\InvoiceApp;
+use App\Invoice\Application\Dto\CreateInvoiceDto;
+use App\Invoice\Application\Dto\CreateInvoiceLineDto;
 use App\Invoice\Application\Exception\InvoiceCannotBeSent;
 use App\Invoice\Application\Exception\InvoiceNotFound;
+use App\Invoice\Application\InvoiceApp;
 use App\Invoice\Application\Query\InvoiceView;
 use App\Invoice\Application\Query\InvoiceViews;
 use App\Invoice\Application\Repository\Exception\NotFound;
 use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
-use App\Invoice\Domain\Invoice;
-use App\Invoice\Domain\InvoiceLine;
-use App\Invoice\Infrastructure\Http\Dto\CreateInvoiceDto;
-use App\Invoice\Infrastructure\Http\Dto\CreateInvoiceLineDto;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -69,19 +67,9 @@ class InvoiceController extends AbstractController
         )] CreateInvoiceDto $dto,
     ): JsonResponse
     {
-        $lines = array_map(
-            fn(CreateInvoiceLineDto $lineDto) => new InvoiceLine(
-                $lineDto->productName,
-                $lineDto->quantity,
-                $lineDto->unitPrice,
-            ),
-            $dto->lines,
-        );
+        $createdInvoiceId = $this->app->createInvoice($dto);
 
-        $invoice = new Invoice($dto->customerName, $dto->customerEmail, $lines);
-        $this->invoiceRepository->save($invoice);
-
-        return $this->json(['id' => $invoice->id], Response::HTTP_CREATED);
+        return $this->json(['id' => $createdInvoiceId], Response::HTTP_CREATED);
     }
 
     #[Route('/api/invoices/{id}', name: 'api_invoice_get', methods: ['GET'])]

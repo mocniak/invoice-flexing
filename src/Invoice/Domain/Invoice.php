@@ -60,6 +60,9 @@ class Invoice
         );
     }
 
+    /**
+     * @throws InvalidInvoiceTransition
+     */
     public function markAsInSending(): void
     {
         if ($this->status !== InvoiceStatus::Draft) {

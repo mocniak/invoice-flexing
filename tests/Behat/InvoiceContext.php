@@ -9,6 +9,7 @@ use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
 use App\Invoice\Domain\Invoice;
 use App\Invoice\Domain\InvoiceLine;
 use App\Invoice\Domain\InvoiceStatus;
+use App\Tests\Invoice\Mother\InvoiceMother;
 use App\Tests\Invoice\Stub\NotificationApiStub;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
@@ -57,7 +58,9 @@ final class InvoiceContext implements Context
     #[Given('/^there is an Invoice created$/')]
     public function thereIsAnInvoiceCreated(): void
     {
-        $this->createdInvoiceId = $this->app->createInvoice();
+        $createdInvoice = InvoiceMother::any();
+        $this->invoiceRepository->save($createdInvoice);
+        $this->createdInvoiceId = $createdInvoice->id;
     }
 
     #[When('/^I retrieve created invoice$/')]
@@ -84,9 +87,9 @@ final class InvoiceContext implements Context
         $lines = [];
         foreach ($table->getColumnsHash() as $row) {
             $lines[] = new InvoiceLine(
-                (string) $row['product'],
-                (int) $row['quantity'],
-                (int) $row['unitPrice'],
+                (string)$row['product'],
+                (int)$row['quantity'],
+                (int)$row['unitPrice'],
             );
         }
 
@@ -163,6 +166,7 @@ final class InvoiceContext implements Context
     {
         Assert::assertTrue($this->notificationApiStub->didReceiveNotification($this->createdInvoiceId));
     }
+
     #[Then('the response status code should be :statusCode')]
     public function theResponseStatusCodeShouldBe(int $statusCode): void
     {
@@ -183,7 +187,7 @@ final class InvoiceContext implements Context
     public function theResponseJsonShouldContainAValidUuidId(): void
     {
         Assert::assertNotNull($this->response, 'No response received');
-        $data = json_decode((string) $this->response->getContent(), true);
+        $data = json_decode((string)$this->response->getContent(), true);
         Assert::assertIsArray($data);
         Assert::assertArrayHasKey('id', $data);
         Assert::assertTrue(Uuid::isValid($data['id']));
@@ -193,7 +197,7 @@ final class InvoiceContext implements Context
     public function theResponseJsonShouldContainError(string $error): void
     {
         Assert::assertNotNull($this->response, 'No response received');
-        $data = json_decode((string) $this->response->getContent(), true);
+        $data = json_decode((string)$this->response->getContent(), true);
         Assert::assertIsArray($data);
         Assert::assertSame($error, $data['error'] ?? null);
     }
@@ -202,7 +206,7 @@ final class InvoiceContext implements Context
     public function theResponseJsonShouldContainCustomerAndEmailAndStatus(string $name, string $email, string $status): void
     {
         Assert::assertNotNull($this->response, 'No response received');
-        $data = json_decode((string) $this->response->getContent(), true);
+        $data = json_decode((string)$this->response->getContent(), true);
         Assert::assertIsArray($data);
         Assert::assertSame($name, $data['customerName'] ?? null);
         Assert::assertSame($email, $data['customerEmail'] ?? null);
@@ -213,11 +217,11 @@ final class InvoiceContext implements Context
     public function theResponseJsonShouldContainAViolationOn(string $propertyPath): void
     {
         Assert::assertNotNull($this->response, 'No response received');
-        $data = json_decode((string) $this->response->getContent(), true);
+        $data = json_decode((string)$this->response->getContent(), true);
         Assert::assertIsArray($data);
         Assert::assertArrayHasKey('violations', $data);
 
-        $violationPaths = array_map(static fn (array $v) => $v['propertyPath'] ?? '', $data['violations']);
+        $violationPaths = array_map(static fn(array $v) => $v['propertyPath'] ?? '', $data['violations']);
         Assert::assertContains(
             $propertyPath,
             $violationPaths,
@@ -229,7 +233,7 @@ final class InvoiceContext implements Context
     public function theResponseJsonShouldMatchTheCreatedInvoice(): void
     {
         Assert::assertNotNull($this->response, 'No response received');
-        $data = json_decode((string) $this->response->getContent(), true);
+        $data = json_decode((string)$this->response->getContent(), true);
         Assert::assertIsArray($data);
 
         $invoice = $this->createdInvoice ?? ($this->createdInvoiceId !== null ? $this->invoiceRepository->get($this->createdInvoiceId) : null);

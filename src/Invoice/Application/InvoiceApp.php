@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Invoice\Application;
 
+use App\Invoice\Application\Dto\CreateInvoiceDto;
+use App\Invoice\Application\Dto\CreateInvoiceLineDto;
 use App\Invoice\Application\Exception\InvoiceCannotBeSent;
 use App\Invoice\Application\Exception\InvoiceNotFound;
 use App\Invoice\Application\Repository\Exception\NotFound;
@@ -23,9 +25,18 @@ readonly class InvoiceApp
     {
     }
 
-    public function createInvoice(): Uuid
+    public function createInvoice(CreateInvoiceDto $dto): Uuid
     {
-        $newInvoice = new Invoice('Customer Name', 'customer@example.com', [new InvoiceLine('Product Name', 1, 100)]);
+        $lines = array_map(
+            fn(CreateInvoiceLineDto $lineDto) => new InvoiceLine(
+                $lineDto->productName,
+                $lineDto->quantity,
+                $lineDto->unitPrice,
+            ),
+            $dto->lines,
+        );
+
+        $newInvoice = new Invoice($dto->customerName, $dto->customerEmail, $lines);
         $this->invoiceRepository->save($newInvoice);
 
         return $newInvoice->id;
