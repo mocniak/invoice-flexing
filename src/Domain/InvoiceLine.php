@@ -11,6 +11,12 @@ readonly class InvoiceLine
         public int $unitPrice
     )
     {
+        if ($unitPrice <= 0) {
+            throw new \Exception('Unit price has to be greater than zero');
+        }
+        if ($this->quantity <= 0) {
+            throw new \Exception('Quantity has to be greater than zero');
+        }
     }
     public function getLinePrice(): int
     {

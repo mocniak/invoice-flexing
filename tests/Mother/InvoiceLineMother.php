@@ -8,12 +8,18 @@ use App\Domain\InvoiceLine;
 class InvoiceLineMother
 {
     private int $quantity = 1;
-    private int $unitPrice;
+    private int $unitPrice = 100;
 
     public static function aLine(): self
     {
         return new self();
     }
+
+    public static function any(): InvoiceLine
+    {
+        return self::aLine()->build();
+    }
+
     public function withQuantity(int $quantity): self
     {
         $this->quantity = $quantity;

@@ -15,6 +15,6 @@ class InvoiceTest extends TestCase
             InvoiceLineMother::aLine()->withQuantity(3)->withUnitPrice(10)->build(),
             InvoiceLineMother::aLine()->withQuantity(7)->withUnitPrice(3)->build(),
         ]);
-        $this->assertEquals(51, $invoice->totalPrice());
+        $this->assertEquals(51, $invoice->getTotalPrice());
     }
 }
