@@ -4,14 +4,12 @@ declare(strict_types=1);
 namespace App\Invoice\Infrastructure\Http;
 
 use App\Invoice\Application\Dto\CreateInvoiceDto;
-use App\Invoice\Application\Dto\CreateInvoiceLineDto;
 use App\Invoice\Application\Exception\InvoiceCannotBeSent;
 use App\Invoice\Application\Exception\InvoiceNotFound;
 use App\Invoice\Application\InvoiceApp;
 use App\Invoice\Application\Query\InvoiceView;
 use App\Invoice\Application\Query\InvoiceViews;
 use App\Invoice\Application\Repository\Exception\NotFound;
-use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +25,6 @@ use Symfony\Component\Uid\Uuid;
 class InvoiceController extends AbstractController
 {
     public function __construct(
-        private readonly InvoiceRepositoryInterface $invoiceRepository,
         private readonly InvoiceViews $invoiceViews,
         private readonly InvoiceApp $app,
     )

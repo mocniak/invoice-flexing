@@ -39,7 +39,6 @@ class InvoiceViewsTest extends TestCase
 
         $view = $this->invoiceViews->get($invoice->id);
 
-        $this->assertInstanceOf(InvoiceView::class, $view);
         $this->assertSame($invoice->id, $view->id);
         $this->assertSame('Acme Corp', $view->customerName);
         $this->assertSame('billing@acme.com', $view->customerEmail);
@@ -71,7 +70,6 @@ class InvoiceViewsTest extends TestCase
 
         $view = $this->invoiceViews->get($invoice->id);
 
-        $this->assertInstanceOf(InvoiceView::class, $view);
         $this->assertSame($invoice->id, $view->id);
         $this->assertSame('John Doe', $view->customerName);
         $this->assertSame('john@example.com', $view->customerEmail);
