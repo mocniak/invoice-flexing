@@ -7,7 +7,8 @@ A simple Symfony-based application for creating and sending invoices
 1. To leverage a makefile, have `make` installed on the local machine (for debian/ubuntu - `sudo apt install make`)
 2. Run `make build` to build fresh images
 3. Run `make up` to start the application
-4. Run `make create-db` to install the database schema
+4. Rub `make composer-install` to install dependencies
+5. Run `make create-db` to create the database schema
 
 ## Endpoint documentation
 
