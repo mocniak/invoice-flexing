@@ -5,6 +5,7 @@ namespace App\Invoice\Application\Handler;
 
 use App\Invoice\Application\Repository\Exception\NotFound;
 use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
+use App\Invoice\Domain\Exception\InvalidInvoiceTransition;
 use App\Notification\Api\Events\NotificationSentEvent;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
@@ -20,11 +21,17 @@ final readonly class NotificationSentHandler
     {
         try {
             $invoice = $this->invoiceRepository->get($event->resourceId);
-        } catch (NotFound $e) {
+        } catch (NotFound) {
             // something was sent, but it was not the invoice from this module - do nothing
             return;
         }
-        $invoice->markAsSent();
+
+        try {
+            $invoice->markAsSent();
+        } catch (InvalidInvoiceTransition) {
+            // it is worth logging the invalid transition somewhere
+            return;
+        }
         $this->invoiceRepository->save($invoice);
     }
 }
