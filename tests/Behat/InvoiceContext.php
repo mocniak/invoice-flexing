@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Behat;
 
-use App\Application\App;
-use App\Application\Repository\InvoiceRepositoryInterface;
-use App\Domain\Invoice;
-use App\Domain\InvoiceLine;
-use App\Domain\InvoiceStatus;
+use App\Invoice\Application\App;
+use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
+use App\Invoice\Domain\Invoice;
+use App\Invoice\Domain\InvoiceLine;
+use App\Invoice\Domain\InvoiceStatus;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;

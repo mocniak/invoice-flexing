@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Application\Query;
+namespace App\Invoice\Application\Query;
 
 final readonly class InvoiceLineView
 {

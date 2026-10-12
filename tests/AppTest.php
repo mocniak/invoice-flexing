@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Application\App;
-use App\Application\Repository\InvoiceRepositoryInterface;
-use App\Domain\Invoice;
+use App\Invoice\Application\App;
+use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
+use App\Invoice\Domain\Invoice;
 use App\Tests\Mother\InvoiceLineMother;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\MailerInterface;

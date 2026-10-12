@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Application\Query;
+namespace App\Invoice\Application\Query;
 
-use App\Domain\InvoiceStatus;
+use App\Invoice\Domain\InvoiceStatus;
 use Symfony\Component\Uid\Uuid;
 
 final readonly class InvoiceView

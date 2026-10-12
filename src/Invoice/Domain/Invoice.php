@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain;
+namespace App\Invoice\Domain;
 
-use App\Infrastructure\Repository\DoctrineInvoiceRepository;
+use App\Invoice\Infrastructure\Repository\DoctrineInvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;

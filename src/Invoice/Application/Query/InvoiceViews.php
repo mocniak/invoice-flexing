@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Application\Query;
+namespace App\Invoice\Application\Query;
 
-use App\Application\Repository\Exception\NotFound;
-use App\Application\Repository\InvoiceRepositoryInterface;
-use App\Domain\InvoiceLine;
+use App\Invoice\Application\Repository\Exception\NotFound;
+use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
+use App\Invoice\Domain\InvoiceLine;
 use Symfony\Component\Uid\Uuid;
 
 readonly class InvoiceViews

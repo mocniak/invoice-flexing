@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Application\Query;
 
-use App\Application\Query\InvoiceLineView;
-use App\Application\Query\InvoiceView;
-use App\Application\Query\InvoiceViews;
-use App\Application\Repository\Exception\NotFound;
-use App\Application\Repository\InvoiceRepositoryInterface;
-use App\Domain\Invoice;
-use App\Domain\InvoiceLine;
+use App\Invoice\Application\Query\InvoiceLineView;
+use App\Invoice\Application\Query\InvoiceView;
+use App\Invoice\Application\Query\InvoiceViews;
+use App\Invoice\Application\Repository\Exception\NotFound;
+use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
+use App\Invoice\Domain\Invoice;
+use App\Invoice\Domain\InvoiceLine;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 

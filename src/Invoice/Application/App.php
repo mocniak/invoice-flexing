@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Application;
+namespace App\Invoice\Application;
 
-use App\Application\Exception\InvoiceCannotBeSent;
-use App\Application\Exception\InvoiceNotFound;
-use App\Application\Repository\Exception\NotFound;
-use App\Application\Repository\InvoiceRepositoryInterface;
-use App\Domain\Invoice;
-use App\Domain\InvoiceLine;
-use App\Domain\InvoiceStatus;
+use App\Invoice\Application\Exception\InvoiceCannotBeSent;
+use App\Invoice\Application\Exception\InvoiceNotFound;
+use App\Invoice\Application\Repository\Exception\NotFound;
+use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
+use App\Invoice\Domain\Invoice;
+use App\Invoice\Domain\InvoiceLine;
+use App\Invoice\Domain\InvoiceStatus;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Uid\Uuid;

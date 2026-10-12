@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Infrastructure\Http;
+namespace App\Invoice\Infrastructure\Http;
 
-use App\Application\App;
-use App\Application\Exception\InvoiceCannotBeSent;
-use App\Application\Exception\InvoiceNotFound;
-use App\Application\Query\InvoiceView;
-use App\Application\Query\InvoiceViews;
-use App\Application\Repository\Exception\NotFound;
-use App\Application\Repository\InvoiceRepositoryInterface;
-use App\Domain\Invoice;
-use App\Domain\InvoiceLine;
-use App\Infrastructure\Http\Dto\CreateInvoiceDto;
-use App\Infrastructure\Http\Dto\CreateInvoiceLineDto;
+use App\Invoice\Application\App;
+use App\Invoice\Application\Exception\InvoiceCannotBeSent;
+use App\Invoice\Application\Exception\InvoiceNotFound;
+use App\Invoice\Application\Query\InvoiceView;
+use App\Invoice\Application\Query\InvoiceViews;
+use App\Invoice\Application\Repository\Exception\NotFound;
+use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
+use App\Invoice\Domain\Invoice;
+use App\Invoice\Domain\InvoiceLine;
+use App\Invoice\Infrastructure\Http\Dto\CreateInvoiceDto;
+use App\Invoice\Infrastructure\Http\Dto\CreateInvoiceLineDto;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

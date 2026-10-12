@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Repository;
+namespace App\Invoice\Application\Repository;
 
-use App\Application\Repository\Exception\NotFound;
-use App\Domain\Invoice;
+use App\Invoice\Application\Repository\Exception\NotFound;
+use App\Invoice\Domain\Invoice;
 use Symfony\Component\Uid\Uuid;
 
 interface InvoiceRepositoryInterface

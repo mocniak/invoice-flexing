@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain;
 
-use App\Domain\Invoice;
+use App\Invoice\Domain\Invoice;
 use App\Tests\Mother\InvoiceLineMother;
 use PHPUnit\Framework\TestCase;
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Mother;
 
-use App\Domain\InvoiceLine;
+use App\Invoice\Domain\InvoiceLine;
 
 class InvoiceLineMother
 {

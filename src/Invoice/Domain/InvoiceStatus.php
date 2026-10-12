@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain;
+namespace App\Invoice\Domain;
 
 enum InvoiceStatus: string
 {
