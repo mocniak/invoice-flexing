@@ -39,9 +39,7 @@ bash: ## Connect to the FrankenPHP container via bash so up and down arrows go t
 	@$(PHP_CONT) bash
 
 create-db:
-	@$(DOCKER_COMP) exec -e APP_ENV=dev php bin/console doctrine:database:create --if-not-exists
 	@$(DOCKER_COMP) exec -e APP_ENV=dev php bin/console doctrine:schema:update --force
-	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/console doctrine:database:create --if-not-exists
 	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/console doctrine:schema:update --force
 
 test: ## Start tests with phpunit, pass the parameter "c=" to add options to phpunit, example: make test c="--group e2e --stop-on-failure"
