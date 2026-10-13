@@ -72,7 +72,7 @@ final class InvoiceContext implements Context
     #[Then('/^retrieved Invoice status is "([^"]*)"$/')]
     public function retrievedInvoiceStatusIs(string $status): void
     {
-        Assert::assertSame(InvoiceStatus::from($status), $this->retrievedInvoice->status);
+        Assert::assertSame(InvoiceStatus::from($status), $this->retrievedInvoice->getStatus());
     }
 
     #[When('/^I send the created invoice to the customer$/')]
@@ -244,7 +244,7 @@ final class InvoiceContext implements Context
         if (isset($data['customerName'])) {
             Assert::assertSame($invoice->customerName, $data['customerName']);
             Assert::assertSame($invoice->customerEmail, $data['customerEmail']);
-            Assert::assertSame($invoice->status->value, $data['status']);
+            Assert::assertSame($invoice->getStatus()->value, $data['status']);
             Assert::assertCount(count($invoice->lines), $data['lines']);
 
             foreach ($invoice->lines as $index => $line) {
@@ -275,6 +275,6 @@ final class InvoiceContext implements Context
     public function theCreatedInvoiceStatusIs(string $status): void
     {
         $createdInvoice = $this->invoiceRepository->get($this->createdInvoiceId);
-        Assert::assertEquals(InvoiceStatus::from($status), $createdInvoice->status);
+        Assert::assertEquals(InvoiceStatus::from($status), $createdInvoice->getStatus());
     }
 }

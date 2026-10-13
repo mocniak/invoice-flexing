@@ -29,13 +29,13 @@ class NotificationSentHandlerTest extends TestCase
         $repository->expects($this->once())
             ->method('save')
             ->with($this->callback(function (Invoice $savedInvoice) {
-                return $savedInvoice->status() === InvoiceStatus::SentToClient;
+                return $savedInvoice->getStatus() === InvoiceStatus::SentToClient;
             }));
 
         $handler = new NotificationSentHandler($repository);
         $handler(new NotificationSentEvent($invoice->id));
 
-        $this->assertSame(InvoiceStatus::SentToClient, $invoice->status());
+        $this->assertSame(InvoiceStatus::SentToClient, $invoice->getStatus());
     }
 
     public function testNotificationWithResourceIdNotFoundAsInvoiceIdAreIgnored(): void

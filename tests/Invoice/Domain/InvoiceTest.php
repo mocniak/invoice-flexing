@@ -25,7 +25,7 @@ class InvoiceTest extends TestCase
     {
         $invoice = InvoiceMother::anInvoice()->withNonEmptyLines()->build();
         $invoice->markAsInSending();
-        $this->assertEquals(InvoiceStatus::InSending, $invoice->status());
+        $this->assertEquals(InvoiceStatus::InSending, $invoice->getStatus());
     }
 
     public function testDraftInvoiceCannotBeMarkedAsSent(): void
@@ -48,7 +48,7 @@ class InvoiceTest extends TestCase
         $invoice = InvoiceMother::anInvoice()->withNonEmptyLines()->build();
         $invoice->markAsInSending();
         $invoice->markAsSent();
-        $this->assertEquals(InvoiceStatus::SentToClient, $invoice->status());
+        $this->assertEquals(InvoiceStatus::SentToClient, $invoice->getStatus());
     }
 
     public function testSentInvoiceCannotBeMarkedAsSentAgain(): void

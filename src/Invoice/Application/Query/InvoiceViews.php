@@ -34,7 +34,7 @@ readonly class InvoiceViews
 
         return new InvoiceView(
             $invoice->id,
-            $invoice->status,
+            $invoice->getStatus(),
             $invoice->customerName,
             $invoice->customerEmail,
             $lineViews,

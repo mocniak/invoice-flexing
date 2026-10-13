@@ -19,7 +19,7 @@ class Invoice
     public readonly UuidV7 $id;
 
     #[ORM\Column(type: 'string', enumType: InvoiceStatus::class)]
-    public InvoiceStatus $status;
+    private InvoiceStatus $status;
 
     #[ORM\Column(type: 'string', length: 255)]
     public readonly string $customerName;
@@ -46,7 +46,7 @@ class Invoice
         $this->lines = $lines;
     }
 
-    public function status(): InvoiceStatus
+    public function getStatus(): InvoiceStatus
     {
         return $this->status;
     }

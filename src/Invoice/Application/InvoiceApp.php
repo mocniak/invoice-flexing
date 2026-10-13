@@ -54,7 +54,7 @@ readonly class InvoiceApp
             throw new InvoiceNotFound('Invoice not found');
         }
 
-        if ($invoiceToSend->status !== InvoiceStatus::Draft) {
+        if ($invoiceToSend->getStatus() !== InvoiceStatus::Draft) {
             throw new InvoiceCannotBeSent('Invoice must be in draft status');
         }
         if (count($invoiceToSend->lines) === 0) {
