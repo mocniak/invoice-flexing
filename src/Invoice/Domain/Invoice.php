@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Invoice\Domain;
 
+use App\Util\ArrayUtil;
 use App\Invoice\Domain\Exception\InvalidInvoiceTransition;
 use App\Invoice\Infrastructure\Repository\DoctrineInvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,7 +32,7 @@ class Invoice
      * @var InvoiceLine[]
      */
     #[ORM\Column(type: 'json')]
-    public array $lines;
+    private array $lines;
 
     public function __construct(
         string $customerName,
@@ -43,12 +44,25 @@ class Invoice
         $this->status = InvoiceStatus::Draft;
         $this->customerName = $customerName;
         $this->customerEmail = $customerEmail;
-        $this->lines = $lines;
+        foreach ($lines as $line) {
+            if (!$line instanceof InvoiceLine) {
+                throw new \InvalidArgumentException('All the lines have to be instances of InvoiceLine');
+            }
+        }
+        $this->lines = ArrayUtil::clone($lines);
     }
 
     public function getStatus(): InvoiceStatus
     {
         return $this->status;
+    }
+
+    /**
+     * @return InvoiceLine[]
+     */
+    public function getLines(): array
+    {
+        return ArrayUtil::clone($this->lines);
     }
 
     public function getTotalPrice(): int

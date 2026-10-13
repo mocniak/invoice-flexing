@@ -57,7 +57,7 @@ readonly class InvoiceApp
         if ($invoiceToSend->getStatus() !== InvoiceStatus::Draft) {
             throw new InvoiceCannotBeSent('Invoice must be in draft status');
         }
-        if (count($invoiceToSend->lines) === 0) {
+        if (count($invoiceToSend->getLines()) === 0) {
             throw new InvoiceCannotBeSent('Invoice has to contain at least one line');
         }
         $this->notificationApi->notify(new NotifyData(

@@ -7,8 +7,14 @@ use App\Invoice\Domain\InvoiceLine;
 
 class InvoiceLineMother
 {
-    private int $quantity = 1;
-    private int $unitPrice = 100;
+    private int $quantity;
+    private int $unitPrice;
+
+    public function __construct()
+    {
+        $this->quantity = random_int(1, 1000);
+        $this->unitPrice = random_int(1, 100000);
+    }
 
     public static function aLine(): self
     {

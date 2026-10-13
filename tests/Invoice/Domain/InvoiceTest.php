@@ -71,5 +71,19 @@ class InvoiceTest extends TestCase
         $invoice->markAsInSending();
     }
 
+    public function testInvoiceLinesCannotBeChangedOutsideOfTheEntity(): void
+    {
+        $lines = [InvoiceLineMother::any(), InvoiceLineMother::any()];
+        $invoice = InvoiceMother::anInvoice()->withLines($lines)->build();
+        $this->assertEquals($lines, $invoice->getLines());
+        array_pop($lines);
+        $this->assertCount(1, $lines);
+        $this->assertCount(2, $invoice->getLines());
+    }
 
+    public function testCreatingInvoiceWithLinesOtherThanInvoiceLineThrowsAnException(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        InvoiceMother::anInvoice()->withLines([InvoiceLineMother::any(), new \stdClass()])->build();
+    }
 }

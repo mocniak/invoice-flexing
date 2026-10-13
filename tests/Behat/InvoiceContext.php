@@ -245,9 +245,9 @@ final class InvoiceContext implements Context
             Assert::assertSame($invoice->customerName, $data['customerName']);
             Assert::assertSame($invoice->customerEmail, $data['customerEmail']);
             Assert::assertSame($invoice->getStatus()->value, $data['status']);
-            Assert::assertCount(count($invoice->lines), $data['lines']);
+            Assert::assertCount(count($invoice->getLines()), $data['lines']);
 
-            foreach ($invoice->lines as $index => $line) {
+            foreach ($invoice->getLines() as $index => $line) {
                 Assert::assertSame($line->productName, $data['lines'][$index]['productName']);
                 Assert::assertSame($line->quantity, $data['lines'][$index]['quantity']);
                 Assert::assertSame($line->unitPrice, $data['lines'][$index]['unitPrice']);
@@ -260,9 +260,9 @@ final class InvoiceContext implements Context
         } else {
             Assert::assertSame($invoice->customerName, $data['customerId']);
             Assert::assertSame($invoice->getTotalPrice(), $data['totalPrice']);
-            Assert::assertCount(count($invoice->lines), $data['lines']);
+            Assert::assertCount(count($invoice->getLines()), $data['lines']);
 
-            foreach ($invoice->lines as $index => $line) {
+            foreach ($invoice->getLines() as $index => $line) {
                 Assert::assertSame($line->productName, $data['lines'][$index]['productName']);
                 Assert::assertSame($line->quantity, $data['lines'][$index]['quantity']);
                 Assert::assertSame($line->unitPrice, $data['lines'][$index]['unitPrice']);

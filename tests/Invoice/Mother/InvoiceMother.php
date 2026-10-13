@@ -29,4 +29,10 @@ class InvoiceMother
         $this->lines[] = InvoiceLineMother::nonEmpty();
         return $this;
     }
+
+    public function withLines(array $lines):self
+    {
+        $this->lines = $lines;
+        return $this;
+    }
 }

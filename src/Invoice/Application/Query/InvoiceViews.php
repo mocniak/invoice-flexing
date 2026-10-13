@@ -29,7 +29,7 @@ readonly class InvoiceViews
                 $line->unitPrice,
                 $line->getLinePrice(),
             ),
-            $invoice->lines
+            $invoice->getLines()
         );
 
         return new InvoiceView(
