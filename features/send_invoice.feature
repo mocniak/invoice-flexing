@@ -28,7 +28,7 @@ Feature: Send Invoice API
     When I send a POST request to "/api/invoices/{id}/send"
     Then the response status code should be 409
     And the response content type should be "application/json"
-    And the response JSON should contain error "Invoice must be in draft status"
+    And the response JSON should contain error "Only invoices in draft status can be marked as in sending"
 
   Scenario: Attempting to send an invoice without lines
     Given there is an invoice for "Bob Smith" with email "bob@example.com"

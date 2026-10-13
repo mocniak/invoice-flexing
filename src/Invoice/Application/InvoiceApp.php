@@ -8,10 +8,11 @@ use App\Invoice\Application\Dto\CreateInvoiceLineDto;
 use App\Invoice\Application\Exception\InvoiceCannotBeSent;
 use App\Invoice\Application\Exception\InvoiceNotFound;
 use App\Invoice\Application\Repository\Exception\NotFound;
+use App\Invoice\Application\Repository\Exception\SavingStaleInvoice;
 use App\Invoice\Application\Repository\InvoiceRepositoryInterface;
+use App\Invoice\Domain\Exception\InvalidInvoiceTransition;
 use App\Invoice\Domain\Invoice;
 use App\Invoice\Domain\InvoiceLine;
-use App\Invoice\Domain\InvoiceStatus;
 use App\Notification\Api\Data\NotifyData;
 use App\Notification\Api\NotificationApi;
 use Symfony\Component\Uid\Uuid;
@@ -54,11 +55,16 @@ readonly class InvoiceApp
             throw new InvoiceNotFound('Invoice not found');
         }
 
-        if ($invoiceToSend->getStatus() !== InvoiceStatus::Draft) {
-            throw new InvoiceCannotBeSent('Invoice must be in draft status');
+        try {
+            $invoiceToSend->markAsInSending();
+        } catch (InvalidInvoiceTransition $e) {
+            throw new InvoiceCannotBeSent($e->getMessage());
         }
-        if (count($invoiceToSend->getLines()) === 0) {
-            throw new InvoiceCannotBeSent('Invoice has to contain at least one line');
+
+        try {
+            $this->invoiceRepository->save($invoiceToSend);
+        } catch (SavingStaleInvoice $e) {
+            throw new InvoiceCannotBeSent($e->getMessage());
         }
         $this->notificationApi->notify(new NotifyData(
             resourceId: $invoiceId,
@@ -66,7 +72,5 @@ readonly class InvoiceApp
             subject: 'Here is your invoice.',
             message: 'Lorem ipsum dolor sit amet.'
         ));
-        $invoiceToSend->markAsInSending();
-        $this->invoiceRepository->save($invoiceToSend);
     }
 }

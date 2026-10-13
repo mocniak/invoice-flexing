@@ -19,6 +19,10 @@ class Invoice
     #[ORM\Column(type: 'uuid', unique: true)]
     public readonly UuidV7 $id;
 
+    #[ORM\Version]
+    #[ORM\Column(type: 'integer')]
+    private int $version = 1;
+
     #[ORM\Column(type: 'string', enumType: InvoiceStatus::class)]
     private InvoiceStatus $status;
 
@@ -81,6 +85,9 @@ class Invoice
     {
         if ($this->status !== InvoiceStatus::Draft) {
             throw new InvalidInvoiceTransition('Only invoices in draft status can be marked as in sending');
+        }
+        if (count($this->getLines()) === 0) {
+            throw new InvalidInvoiceTransition('Invoice has to contain at least one line');
         }
         $this->status = InvoiceStatus::InSending;
     }
