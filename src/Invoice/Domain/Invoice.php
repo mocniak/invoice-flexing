@@ -103,7 +103,7 @@ class Invoice
         $this->status = InvoiceStatus::SentToClient;
     }
 
-    // mapping details required by ORM
+    // mapping logic required by ORM
     #[ORM\PostLoad]
     public function postLoad(): void
     {

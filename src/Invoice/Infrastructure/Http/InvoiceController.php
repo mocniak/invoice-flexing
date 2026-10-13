@@ -57,6 +57,7 @@ class InvoiceController extends AbstractController
     )]
     public function create(
         #[MapRequestPayload(
+            acceptFormat: 'json',
             serializationContext: [
                 AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
                 DenormalizerInterface::COLLECT_EXTRA_ATTRIBUTES_ERRORS => true,
