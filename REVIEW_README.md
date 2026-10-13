@@ -33,3 +33,4 @@ For apps like Postman a JSON schema of endpoints is available at http://localhos
 2. Invoice Query maps entities instead of fetching them directly from the database. I'd optimize this when the performance becomes an issue.
 3. Notification API is used directly in the Invoice application layer, but since they're both in the same codebase and have the same development team (me :v) no ACL is used.
 4. Notification module is assumed to response synchronously to API calls and to handle asynchronous communication and errors with mailing services on its own, so I decided that outbox/sagas are not required for now.
+5. Money is represented as integers (cents), but since there are no currencies and complex calculations are not required, I decided that this approach is enough for now.
